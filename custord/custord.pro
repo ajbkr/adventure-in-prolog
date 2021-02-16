@@ -18,6 +18,7 @@ item(3, led, 1000).
 % arg1 Item identification number (same as in the item record)
 % arg2 Amount in stock
 inventory_item(1, 200).
+%inventory_item(1, 9).
 inventory_item(2, 11).
 inventory_item(3, 1500).
 
@@ -40,3 +41,22 @@ good_customer(Customer_name) :-
   customer(Customer_name, _, aaa).
 good_customer(Customer_name) :-
   customer(Customer_name, _, bbb).
+
+valid_order(Customer_name, Item, Quantity) :-
+  good_customer(Customer_name),
+  item_quantity(Item, Amount),
+  Amount > 0,
+  Quantity < Amount.
+
+reorder(Item) :-
+  item_quantity(Item, Amount),
+  item(_, Item, Reorder),
+  Amount < Reorder,
+  write('It is time to reorder'), nl,
+  fail.
+reorder(Item) :-
+  item_quantity(Item, Amount),
+  item(_, Item, Reorder),
+  Amount >= Reorder,
+  write('It is *not* time to reorder'), nl,
+  fail.
